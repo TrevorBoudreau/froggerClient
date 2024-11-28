@@ -21,6 +21,9 @@ import javax.swing.SwingConstants;
 
 public class gamePrepClient extends JFrame implements KeyListener, ActionListener {
 	
+	final int SERVER_PORT = 5556;
+	final int CLIENT_PORT = 5555;
+	
 	//GUI elements
 	//sprites, labels, icons
 	private Container content;
@@ -172,6 +175,8 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 		add(backgroundLabel);
 		
 		//start car and log threads
+		
+		/*
 		for ( int i = 0; i < car.length; i++ ) {
 			for ( int j = 0; j < car[i].length; j++ ) {
 				car[i][j].runThread();
@@ -182,6 +187,8 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 				log[i][j].runThread();
 			}
 		}
+		
+		*/
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
@@ -196,6 +203,8 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 	}
 	
 	public void gameWin() {
+		
+		/*
 		
 		System.out.println("GAME WIN");
 		
@@ -219,9 +228,14 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 		
 		//update score
 		scoreDB.addScore();
+		
+		 
+		 */
 	}
 	
 	public void gameLose() {
+		
+		/*
 		
 		System.out.println("GAME LOSE");
 		
@@ -247,9 +261,13 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 		
 		//update score
 		scoreDB.minusScore();
+		
+		*/
 	}
 	
 	public void gameStart() {
+		
+		/*
 		
 		//let frog be controllable
 		content.setFocusable(true);
@@ -303,6 +321,8 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 		score = scoreDB.getScore();
 		scoreLabel.setText("Score: " + score);
 		
+		*/
+		
 	}
 	
 
@@ -325,35 +345,23 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 		//new x or y for each direction key (UP, DOWN, LEFT, RIGHT)
 		if ( e.getKeyCode()==KeyEvent.VK_UP) {
 				
-			//MOVE UP ONE STEP
-			y -= gameProperties.STEP;
+			//MOVEFROG UP\n
 				
 		} else if ( e.getKeyCode()==KeyEvent.VK_DOWN) {
 				
-			//prevent frog from moving under lower perimeter
-			if (y + gameProperties.STEP < gameProperties.SCREEN_HEIGHT) {
-				y += gameProperties.STEP;
-			}
+			//MOVEFROG DOWN\n
 				
 		} else if ( e.getKeyCode()==KeyEvent.VK_LEFT) {
 		
-			//MOVE LEFT ONE STEP
-			x -= gameProperties.STEP;
-				
-			//Wrap character to other side if he goes off screen
-			if (x + frog.getWidth() < 0) { x = gameProperties.SCREEN_WIDTH; }
+			//MOVEFROG LEFT/n
 				
 		} else if ( e.getKeyCode()==KeyEvent.VK_RIGHT) {
 				
-			//MOVE RIGHT ONE STEP
-			x += gameProperties.STEP;
-				
-			//Wrap character to other side if he goes off screen
-			if (x >= gameProperties.SCREEN_WIDTH) { x = -1 * frog.getWidth(); }
+			//MOVEFROG RIGHT/n 
 				
 		} else {
 				
-			//for all other keys, DONT move character 
+			
 			return;
 		}
 			
@@ -372,6 +380,8 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
 	
+		/*
+		
 		//END GAME WHEN ENDZONE IS REACHED
 		if (frog.getY() < 100) {
 			
@@ -427,6 +437,8 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 			}
 			
 		}
+		
+		*/
 			
 			
 	}
@@ -439,7 +451,13 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 		System.out.println("btn clicked");
 		
 		if (e.getSource() == restartBtn){
-			gameStart();
+			
+			//STARTGAME\n
+			
+			
+			
+			
+			
 		}
 		
 	}

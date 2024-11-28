@@ -1,12 +1,14 @@
+//CLIENT INSTANCE
+
 package froggerGame;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
-public class logSprite extends sprite implements Runnable {
+public class logSprite extends sprite{
 	
 	private Boolean isMoving;
-	private Thread thread;
+	//private Thread thread;
 	private JLabel logLabel;
 	private frogSprite frog;
 	private JLabel frogLabel;
@@ -73,6 +75,8 @@ public class logSprite extends sprite implements Runnable {
 		this.isIntersecting = isIntersecting;
 	}
 
+	/*
+	
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
@@ -176,7 +180,7 @@ public class logSprite extends sprite implements Runnable {
 	}
 	
 	
-
+	*/
 	
 	
 }

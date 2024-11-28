@@ -1,15 +1,8 @@
+//CLIENT INSTANCE
+
 package froggerGame;
 
 import java.awt.Rectangle;
-
-//import java.awt.Rectangle;
-
-/*
- * 
- * 
- * 
- * 
- */
 
 public class sprite {
 

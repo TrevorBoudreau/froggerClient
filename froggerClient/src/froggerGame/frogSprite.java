@@ -1,3 +1,5 @@
+//CLIENT INSTANCE
+
 package froggerGame;
 
 public class frogSprite extends sprite {

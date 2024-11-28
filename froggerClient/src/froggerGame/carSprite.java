@@ -1,13 +1,15 @@
+//CLIENT INSTANCE
+
 package froggerGame;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 
-public class carSprite extends sprite implements Runnable {
+public class carSprite extends sprite {
 	
 	private Boolean isMoving;
-	private Thread thread;
+
 	private frogSprite frog;
 	private JLabel carLabel, frogLabel;
 	private int stepSpeed, stepDirection;
@@ -71,6 +73,7 @@ public class carSprite extends sprite implements Runnable {
 		this.stepDirection = stepDirection;
 	}
 
+	/*
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
@@ -140,6 +143,6 @@ public class carSprite extends sprite implements Runnable {
 		this.setIsMoving(false);
 	}
 	
-	
+	*/
 	
 }
