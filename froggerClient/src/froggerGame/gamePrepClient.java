@@ -9,6 +9,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -190,6 +193,64 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 		
 		*/
 		
+		
+		//client listening server that passes off all variables
+		//to client service (arrays, label arrays, frog, frog label, restart button, ...etc.)
+		//anything needs to be manipulated based on feedback from server.
+		
+		//set up server
+		//create listening thread with infinite while loop
+		
+		//set up threads for:
+		//requests for GETFROG, GETCAR, GETLOG
+		
+		Thread t1 = new Thread ( new Runnable () {
+			
+			public void run ( ) {
+				
+				synchronized(this) {
+					
+					ServerSocket client;
+					
+					try {
+						
+						client = new ServerSocket(CLIENT_PORT);
+						
+						while (true) {
+							
+							Socket s2;
+							try {
+								
+								s2 = client.accept();
+								ClientService myService = new ClientService (s2, frog, log, car,
+										CLIENT_PORT, backgroundLabel, carLabel, carLabel, restartBtn);
+								Thread t2 = new Thread(myService);
+								t2.start();
+									
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							
+							System.out.println("client connected");
+							
+						}
+					
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					System.out.println("Waiting for server responses...");
+
+				}
+			}
+			
+		});
+		
+		t1.start( );
+		
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
@@ -366,13 +427,13 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 		}
 			
 		//move the frog to new spot with new x and y
-		frog.setX(x);
-		frog.setY(y);
+		//frog.setX(x);
+		//frog.setY(y);
 			
 		//System.out.println("frog x: " + frog.getX() + " hitbox x: " + frog.getHitboxX() + "frog y: " + frog.getY() + " hitbox y: " + frog.getHitboxY());	
 			
 		//move the label with it
-		frogLabel.setLocation( frog.getX() , frog.getY() );
+		//frogLabel.setLocation( frog.getX() , frog.getY() );
 			
 	}
 
