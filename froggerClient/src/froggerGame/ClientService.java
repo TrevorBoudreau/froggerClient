@@ -145,6 +145,25 @@ public class ClientService implements Runnable {
 			//open a socket to client
 			//.....
 			
+			for ( int i = 0; i < log.length; i++ ) {
+				for ( int j = 0; j < log[i].length; j++ ) {
+					
+					if (!in.hasNextInt()) {
+						//To skip the GETLOG part of command string
+						String skip = in.next();
+					}
+					
+					int x = in.nextInt();
+					int y = in.nextInt();
+					
+					log[i][j].setX(x);
+					log[i][j].setY(y);
+					
+					logLabel[i][j].setLocation( log[i][j].getX(), log[i][j].getY() );
+					
+				}
+			}
+			
 			return;
 			
 		}
