@@ -115,9 +115,26 @@ public class ClientService implements Runnable {
 				
 		} else if ( command.equals("GETCAR") ) {
 			
-			int x = in.nextInt();
-			int y = in.nextInt();
-			String moving = in.next();
+			for ( int i = 0; i < car.length; i++ ) {
+				for ( int j = 0; j < car[i].length; j++ ) {
+					
+					if (!in.hasNextInt()) {
+						//To skip the GETCAR part of the command string when looping through,
+						//otherwise the nextInt() below will hit a string and errors out
+						//This took an hour to figure out
+						String skip = in.next();
+					}
+					
+					int x = in.nextInt();
+					int y = in.nextInt();
+					
+					car[i][j].setX(x);
+					car[i][j].setY(y);
+					
+					carLabel[i][j].setLocation( car[i][j].getX(), car[i][j].getY() );
+					
+				}
+			}
 			
 			//car[i][j]
 			

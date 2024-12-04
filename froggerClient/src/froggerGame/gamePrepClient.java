@@ -255,14 +255,11 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 		Thread frogThread = new Thread ( new Runnable () {
 			public void run ( ) {
 				synchronized (this) {
-					
-					ServerSocket client;
-					
 					try {
-						
-						client = new ServerSocket(CLIENT_PORT);
-						
+
 						while (true) {
+							
+							System.out.println("frog thread");
 							
 							try {
 								Socket s = new Socket("localhost", SERVER_PORT);
@@ -271,18 +268,6 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 								PrintWriter out = new PrintWriter(outstream);
 								
 								String command = "GETFROG\n";
-								System.out.println("Sending: "+ command);
-								out.println(command);
-								out.flush();
-								s.close();
-								
-								command = "GETCAR\n";
-								System.out.println("Sending: "+ command);
-								out.println(command);
-								out.flush();
-								s.close();
-								
-								command = "GETLOG\n";
 								System.out.println("Sending: "+ command);
 								out.println(command);
 								out.flush();
@@ -298,9 +283,6 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 							
 						}
 					
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -312,6 +294,94 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 			}
 		});
 		frogThread.start();
+		
+		Thread carThread = new Thread ( new Runnable () {
+			public void run ( ) {
+				synchronized (this) {
+
+					try {
+
+						while (true) {
+							
+							System.out.println("car thread");
+							
+							try {
+								Socket s = new Socket("localhost", SERVER_PORT);
+								//Initialize data stream to send data out
+								OutputStream outstream = s.getOutputStream();
+								PrintWriter out = new PrintWriter(outstream);
+								
+								String command = "GETCAR\n";
+								System.out.println("Sending: "+ command);
+								out.println(command);
+								out.flush();
+								s.close();
+								
+									
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							
+							Thread.sleep(500);
+							
+						}
+					
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					
+
+				}
+			}
+		});
+		carThread.start();
+		
+		Thread logThread = new Thread ( new Runnable () {
+			public void run ( ) {
+				synchronized (this) {
+
+					try {
+						
+						while (true) {
+							
+							System.out.println("log thread");
+							
+							try {
+								Socket s = new Socket("localhost", SERVER_PORT);
+								//Initialize data stream to send data out
+								OutputStream outstream = s.getOutputStream();
+								PrintWriter out = new PrintWriter(outstream);
+								
+								String command = "GETLOG\n";
+								System.out.println("Sending: "+ command);
+								out.println(command);
+								out.flush();
+								s.close();
+								
+									
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							
+							Thread.sleep(500);
+							
+						}
+					
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					
+
+				}
+			}
+		});
+		logThread.start();
 		
 		/*
 		 * Socket s = new Socket("localhost", SERVER_PORT);
