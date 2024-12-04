@@ -1,3 +1,5 @@
+package froggerGame;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -77,54 +79,12 @@ public class ClientService implements Runnable {
 	
 	public void executeCommand(String command) throws IOException{
 		
-		if ( command.equals("MOVEFROG") ) {
-			/*
-			String direction = in.next();
-			
-			int x = frog.getX();
-			int y = frog.getY();
-			
-			if (direction.equals("UP")) {
-				
-				//MOVE UP ONE STEP
-				y -= gameProperties.STEP;
-				
-			} else if (direction.equals("LEFT")) {
-				
-				//MOVE LEFT ONE STEP
-				x -= gameProperties.STEP;
-					
-				//Wrap character to other side if he goes off screen
-				if (x + frog.getWidth() < 0) { x = gameProperties.SCREEN_WIDTH; }
-				
-			} else if (direction.equals("RIGHT")) {
-				
-				//MOVE RIGHT ONE STEP
-				x += gameProperties.STEP;
-					
-				//Wrap character to other side if he goes off screen
-				if (x >= gameProperties.SCREEN_WIDTH) { x = -1 * frog.getWidth(); }
-				
-			} else if (direction.equals("DOWN")) {
-				
-				//prevent frog from moving under lower perimeter
-				if (y + gameProperties.STEP < gameProperties.SCREEN_HEIGHT) {
-					y += gameProperties.STEP;
-				}
-				
-			}
-			
-			//move the frog to new spot with new x and y
-			frog.setX(x);
-			frog.setY(y);
-			
-			*/
-			return;
-			
-		} else if ( command.equals("GETFROG") ) {
+		if ( command.equals("GETFROG") ) {
 			
 			int x = in.nextInt();
 			int y = in.nextInt();
+			
+			System.out.println("X: " + x + "Y: " + y );
 			
 			frog.setX(x);
 			frog.setY(y);
@@ -155,8 +115,11 @@ public class ClientService implements Runnable {
 				
 		} else if ( command.equals("GETCAR") ) {
 			
-			//open a socket to client
-			//.....
+			int x = in.nextInt();
+			int y = in.nextInt();
+			String moving = in.next();
+			
+			//car[i][j]
 			
 			return;
 			

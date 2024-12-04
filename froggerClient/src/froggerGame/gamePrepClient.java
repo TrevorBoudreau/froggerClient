@@ -10,8 +10,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -40,10 +43,10 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 	//score label
 	private JLabel scoreLabel;
 	//score class
-	private scoreSQL scoreDB;
+	//private scoreSQL scoreDB;
 	int score = 0;
 	
-	public gamePrepClient() {
+	public gamePrepClient() throws IOException {
 		
 		//set up screen display
 		setSize(gameProperties.SCREEN_WIDTH, gameProperties.SCREEN_HEIGHT);
@@ -52,8 +55,8 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 		setLayout(null);
 		
 		//set up score db
-		scoreDB = new scoreSQL();
-		scoreDB.createDB();
+		//scoreDB = new scoreSQL();
+		//scoreDB.createDB();
 		
 		//display background graphic
 		backgroundImage = new ImageIcon( getClass().getResource(gameProperties.BACKGROUND_IMAGE ) );
@@ -148,8 +151,8 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 		restartBtn.addActionListener(this);
 		
 		//set up score label
-		score = scoreDB.getScore();
-		scoreLabel = new JLabel("Score: " + scoreDB.getScore(), SwingConstants.CENTER);
+		//score = scoreDB.getScore();
+		scoreLabel = new JLabel("Score: ");
 		scoreLabel.setSize( 100, 50 );
 		scoreLabel.setOpaque(true);
 		scoreLabel.setForeground(Color.GREEN);
@@ -205,10 +208,9 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 		//requests for GETFROG, GETCAR, GETLOG
 		
 		Thread t1 = new Thread ( new Runnable () {
-			
 			public void run ( ) {
 				
-				synchronized(this) {
+				synchronized (this) {
 					
 					ServerSocket client;
 					
@@ -219,11 +221,12 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 						while (true) {
 							
 							Socket s2;
+							
 							try {
 								
 								s2 = client.accept();
 								ClientService myService = new ClientService (s2, frog, log, car,
-										CLIENT_PORT, backgroundLabel, carLabel, carLabel, restartBtn);
+										score, frogLabel, carLabel, logLabel, restartBtn);
 								Thread t2 = new Thread(myService);
 								t2.start();
 									
@@ -247,15 +250,94 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 			}
 			
 		});
-		
 		t1.start( );
 		
+		Thread frogThread = new Thread ( new Runnable () {
+			public void run ( ) {
+				synchronized (this) {
+					
+					ServerSocket client;
+					
+					try {
+						
+						client = new ServerSocket(CLIENT_PORT);
+						
+						while (true) {
+							
+							try {
+								Socket s = new Socket("localhost", SERVER_PORT);
+								//Initialize data stream to send data out
+								OutputStream outstream = s.getOutputStream();
+								PrintWriter out = new PrintWriter(outstream);
+								
+								String command = "GETFROG\n";
+								System.out.println("Sending: "+ command);
+								out.println(command);
+								out.flush();
+								s.close();
+								
+								command = "GETCAR\n";
+								System.out.println("Sending: "+ command);
+								out.println(command);
+								out.flush();
+								s.close();
+								
+								command = "GETLOG\n";
+								System.out.println("Sending: "+ command);
+								out.println(command);
+								out.flush();
+								s.close();
+								
+									
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							
+							Thread.sleep(500);
+							
+						}
+					
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					
+
+				}
+			}
+		});
+		frogThread.start();
+		
+		/*
+		 * Socket s = new Socket("localhost", SERVER_PORT);
+							//Initialize data stream to send data out
+							OutputStream outstream = s.getOutputStream();
+							PrintWriter out = new PrintWriter(outstream);
+							
+							String command = "GETFROG\n";
+							System.out.println("Sending: "+ command);
+							out.println(command);
+							out.flush();
+							s.close();
+							
+							Thread.sleep(500);
+		 * 
+		 */
+		
+		
+		
+		gameStart();
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 
 		gamePrepClient newGame = new gamePrepClient();
@@ -328,6 +410,25 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 	
 	public void gameStart() {
 		
+		//set up a communication socket
+		Socket s;
+		
+		try {
+			s = new Socket("localhost", SERVER_PORT);
+			//Initialize data stream to send data out
+			OutputStream outstream = s.getOutputStream();
+			PrintWriter out = new PrintWriter(outstream);
+			
+			String command = "STARTGAME\n";
+			System.out.println("Sending: " + command);
+			out.println(command);
+			out.flush();
+			
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 		/*
 		
 		//let frog be controllable
@@ -398,27 +499,94 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
 		
+		//set up a communication socket
+		Socket s;
 		
 		//current x and y of frog before step
-		int x = frog.getX();
-		int y = frog.getY();
+		//int x = frog.getX();
+		//int y = frog.getY();
 			
 		//new x or y for each direction key (UP, DOWN, LEFT, RIGHT)
 		if ( e.getKeyCode()==KeyEvent.VK_UP) {
 				
 			//MOVEFROG UP\n
+			
+			try {
+				s = new Socket("localhost", SERVER_PORT);
+				//Initialize data stream to send data out
+				OutputStream outstream = s.getOutputStream();
+				PrintWriter out = new PrintWriter(outstream);
 				
+				String command = "MOVEFROG\n";
+				String direction = "UP\n";
+				System.out.println("Sending: " + command + direction);
+				out.println(command + direction);
+				out.flush();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			
 		} else if ( e.getKeyCode()==KeyEvent.VK_DOWN) {
 				
 			//MOVEFROG DOWN\n
+			
+			try {
+				s = new Socket("localhost", SERVER_PORT);
+				//Initialize data stream to send data out
+				OutputStream outstream = s.getOutputStream();
+				PrintWriter out = new PrintWriter(outstream);
+				
+				String command = "MOVEFROG\n";
+				String direction = "DOWN\n";
+				System.out.println("Sending: " + command + direction);
+				out.println(command + direction);
+				out.flush();
+				
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 				
 		} else if ( e.getKeyCode()==KeyEvent.VK_LEFT) {
 		
 			//MOVEFROG LEFT/n
+			try {
+				s = new Socket("localhost", SERVER_PORT);
+				//Initialize data stream to send data out
+				OutputStream outstream = s.getOutputStream();
+				PrintWriter out = new PrintWriter(outstream);
+				
+				String command = "MOVEFROG\n";
+				String direction = "LEFT\n";
+				System.out.println("Sending: " + command + direction);
+				out.println(command + direction);
+				out.flush();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 				
 		} else if ( e.getKeyCode()==KeyEvent.VK_RIGHT) {
 				
 			//MOVEFROG RIGHT/n 
+			
+			try {
+				s = new Socket("localhost", SERVER_PORT);
+				//Initialize data stream to send data out
+				OutputStream outstream = s.getOutputStream();
+				PrintWriter out = new PrintWriter(outstream);
+				
+				String command = "MOVEFROG\n";
+				String direction = "RIGHT\n";
+				System.out.println("Sending: " + command + direction);
+				out.println(command + direction);
+				out.flush();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 				
 		} else {
 				
