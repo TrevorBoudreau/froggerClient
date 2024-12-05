@@ -31,7 +31,7 @@ public class ClientService implements Runnable {
 	public ClientService() {}
 
 	public ClientService (Socket Socket, frogSprite frog, logSprite[][] log, carSprite[][] car, 
-			int score, JLabel frogLabel, JLabel[][] carLabel, JLabel[][] logLabel, JButton restartButton, Container content ) {
+			int score, JLabel frogLabel, JLabel[][] carLabel, JLabel[][] logLabel, JButton restartButton, Container content, JLabel scoreLabel ) {
 		this.s = Socket;
 		this.frog = frog;
 		this.log = log;
@@ -42,6 +42,7 @@ public class ClientService implements Runnable {
 		this.logLabel = logLabel;
 		this.restartBtn = restartButton;
 		this.content = content;
+		this.scoreLabel = scoreLabel;
 	}
 	
 	public void run() {
@@ -111,8 +112,8 @@ public class ClientService implements Runnable {
 	
 			//frogLabel.setIcon( frogImage );
 			
-			//score = scoreDB.getScore();
-			//scoreLabel.setText("Score: " + score);
+			score = in.nextInt();
+			scoreLabel.setText("Score: " + score);
 			
 			return;
 			
@@ -127,6 +128,9 @@ public class ClientService implements Runnable {
 			
 			//show visibility button
 			restartBtn.setVisible(true);
+			
+			score = in.nextInt();
+			scoreLabel.setText("Score: " + score);
 			
 			
 			return;
@@ -143,6 +147,9 @@ public class ClientService implements Runnable {
 			
 			//show visibility button
 			restartBtn.setVisible(true);
+			
+			score = in.nextInt();
+			scoreLabel.setText("Score: " + score);
 			
 			return;
 				
@@ -175,8 +182,7 @@ public class ClientService implements Runnable {
 					
 				}
 			}
-			
-			//car[i][j]
+
 			
 			return;
 			
@@ -214,33 +220,7 @@ public class ClientService implements Runnable {
 			return;
 			
 		}
-		
-		
-		
-		/*
-		if ( command.equals("PLAYER")) {
-			
-			int playerNo = in.nextInt();
-			String playerAction = in.next();
-			System.out.println("Player "+playerNo+" moves "+playerAction);
-			
-			
-			//send a response
-			Socket s2 = new Socket("localhost", CLIENT_PORT);
-			
-			//Initialize data stream to send data out
-			OutputStream outstream = s2.getOutputStream();
-			PrintWriter out = new PrintWriter(outstream);
 
-			String commandOut = "PLAYER "+playerNo+" POSTION 500 400\n";
-			System.out.println("Sending: " + commandOut);
-			out.println(commandOut);
-			out.flush();
-				
-			s2.close();
-
-		}
-		*/
 	}
 	
 }

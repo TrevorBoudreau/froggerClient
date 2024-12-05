@@ -193,7 +193,7 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 								
 								s2 = client.accept();
 								ClientService myService = new ClientService (s2, frog, log, car,
-										score, frogLabel, carLabel, logLabel, restartBtn, content);
+										score, frogLabel, carLabel, logLabel, restartBtn, content, scoreLabel);
 								Thread t2 = new Thread(myService);
 								t2.start();
 									
