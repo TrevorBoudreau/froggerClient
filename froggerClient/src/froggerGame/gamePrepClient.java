@@ -14,13 +14,11 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.SwingConstants;
 
 //Note: due to the way this game implements collision detection with key release, some unexpected errors
 //		may occur if key is tapped too quickly, or if the key is held in.
@@ -53,11 +51,7 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 		content = getContentPane();
 		content.setBackground(Color.gray);
 		setLayout(null);
-		
-		//set up score db
-		//scoreDB = new scoreSQL();
-		//scoreDB.createDB();
-		
+
 		//display background graphic
 		backgroundImage = new ImageIcon( getClass().getResource(gameProperties.BACKGROUND_IMAGE ) );
 		backgroundLabel = new JLabel();
@@ -179,34 +173,7 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 		add(restartBtn);
 		add(scoreLabel);
 		add(backgroundLabel);
-		
-		//start car and log threads
-		
-		/*
-		for ( int i = 0; i < car.length; i++ ) {
-			for ( int j = 0; j < car[i].length; j++ ) {
-				car[i][j].runThread();
-			}
-		}
-		for ( int i = 0; i < log.length; i++ ) {
-			for ( int j = 0; j < log[i].length; j++ ) {
-				log[i][j].runThread();
-			}
-		}
-		
-		*/
-		
-		
-		//client listening server that passes off all variables
-		//to client service (arrays, label arrays, frog, frog label, restart button, ...etc.)
-		//anything needs to be manipulated based on feedback from server.
-		
-		//set up server
-		//create listening thread with infinite while loop
-		
-		//set up threads for:
-		//requests for GETFROG, GETCAR, GETLOG
-		
+
 		Thread t1 = new Thread ( new Runnable () {
 			public void run ( ) {
 				
@@ -371,100 +338,18 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 			}
 		});
 		logThread.start();
-		
-		/*
-		 * Socket s = new Socket("localhost", SERVER_PORT);
-							//Initialize data stream to send data out
-							OutputStream outstream = s.getOutputStream();
-							PrintWriter out = new PrintWriter(outstream);
-							
-							String command = "GETFROG\n";
-							System.out.println("Sending: "+ command);
-							out.println(command);
-							out.flush();
-							s.close();
-							
-							Thread.sleep(500);
-		 * 
-		 */
-		
-		
-		
+
 		gameStart();
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
-
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 
 		gamePrepClient newGame = new gamePrepClient();
 		newGame.setVisible(true);
 		// KEEP MAIN TO THESE 2 LINES!! //
-	}
-	
-	public void gameWin() {
-		
-		/*
-		
-		System.out.println("GAME WIN");
-		
-		//stop ongoing threads
-		for ( int i = 0; i < car.length; i++ ) {
-			for ( int j = 0; j < car[i].length; j++ ) {
-				car[i][j].stopThread();
-			}
-		}
-		for ( int i = 0; i < log.length; i++ ) {
-			for ( int j = 0; j < log[i].length; j++ ) {
-				log[i][j].stopThread();
-			}
-		}
-		
-		//prevent player from moving
-		content.setFocusable(false);
-		
-		//show visibility button
-		restartBtn.setVisible(true);
-		
-		//update score
-		scoreDB.addScore();
-		
-		 
-		 */
-	}
-	
-	public void gameLose() {
-		
-		/*
-		
-		System.out.println("GAME LOSE");
-		
-		//stop ongoing threads
-		for ( int i = 0; i < car.length; i++ ) {
-			for ( int j = 0; j < car[i].length; j++ ) {
-				car[i][j].stopThread();
-			}
-		}
-		for ( int i = 0; i < log.length; i++ ) {
-			for ( int j = 0; j < log[i].length; j++ ) {
-				log[i][j].stopThread();
-			}
-		}
-		
-		this.frogLabel.setIcon( new ImageIcon( getClass().getResource(gameProperties.FROG_DEAD_IMAGE) ) );	
-				
-		//prevent player from moving
-		content.setFocusable(false);
-				
-		//show visibility button
-		restartBtn.setVisible(true);
-		
-		//update score
-		scoreDB.minusScore();
-		
-		*/
 	}
 	
 	public void gameStart() {
@@ -487,63 +372,7 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
-		/*
-		
-		//let frog be controllable
-		content.setFocusable(true);
-		content.requestFocusInWindow();  //DOES NOT WORK WITHOUT THIS LINE!!
-		
-		//hide visibility button
-		restartBtn.setVisible(false);
-		
-		//reset frogs position to start
-		frog.setX(400);
-		frog.setY(800);
-		frogLabel.setLocation(frog.getX(), frog.getY());
-		
-		//restart threads for cars and logs
-		for ( int i = 0; i < car.length; i++ ) {
-			int temp = 300;//temp local variable for adjusting height during car initialization
-			
-			for ( int j = 0; j < car[i].length; j++ ) {
-				car[i][j].setX(i * 300);
-				car[i][j].setY(gameProperties.SCREEN_HEIGHT - temp);
-				car[i][j].setFrog(frog);
-				car[i][j].setFrogLabel(frogLabel);
-				
-				carLabel[i][j].setLocation( car[i][j].getX(), car[i][j].getY() );
-				
-				car[i][j].runThread();
-				
-				temp += 100;
-			}
-		}
-		for ( int i = 0; i < log.length; i++ ) {
-			int temp2 = 700;//temp local variable for adjusting height during log initialization
-			
-			for ( int j = 0; j < car[i].length; j++ ) {
-				log[i][j].setX(i * 300);
-				log[i][j].setY(gameProperties.SCREEN_HEIGHT - temp2);
-				log[i][j].setFrog(frog);
-				log[i][j].setFrogLabel(frogLabel);
-				log[i][j].setIntersecting(true);
-				
-				logLabel[i][j].setLocation( log[i][j].getX(), log[i][j].getY() );
-				
-				log[i][j].runThread();
-				
-				temp2 += 100;
-			}
-		}
-		
-		frogLabel.setIcon( frogImage );
-		
-		score = scoreDB.getScore();
-		scoreLabel.setText("Score: " + score);
-		
-		*/
-		
+
 	}
 	
 
@@ -560,10 +389,6 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 		
 		//set up a communication socket
 		Socket s;
-		
-		//current x and y of frog before step
-		//int x = frog.getX();
-		//int y = frog.getY();
 			
 		//new x or y for each direction key (UP, DOWN, LEFT, RIGHT)
 		if ( e.getKeyCode()==KeyEvent.VK_UP) {
@@ -648,20 +473,9 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 			}
 				
 		} else {
-				
-			
+
 			return;
-		}
-			
-		//move the frog to new spot with new x and y
-		//frog.setX(x);
-		//frog.setY(y);
-			
-		//System.out.println("frog x: " + frog.getX() + " hitbox x: " + frog.getHitboxX() + "frog y: " + frog.getY() + " hitbox y: " + frog.getHitboxY());	
-			
-		//move the label with it
-		//frogLabel.setLocation( frog.getX() , frog.getY() );
-			
+		}	
 	}
 
 	@Override
@@ -716,101 +530,42 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 		}
 		
 		//IF FROG IS NOT INTERSECTING WITH LOG, END GAME
-		//isIntersecting is calculated on server side and passed back to the client in GETLOG
-		
+		//isIntersecting is calculated on server side and passed back to the client in GETLOG\n
 		//temp variable to break out of nested loop
 		boolean breakOut = false;
-
+		//temp variable to flag if one log is intersecting
+		boolean intersect = false;
 		for ( int i = 0; i < log.length; i++ ) {
 			for ( int j = 0; j < log[i].length; j++ ) {
 						
 						
-				if (log[i][j].isIntersecting == false ) {
-							
-					try {
-						s = new Socket("localhost", SERVER_PORT);
-						//Initialize data stream to send data out
-						OutputStream outstream = s.getOutputStream();
-						PrintWriter out = new PrintWriter(outstream);
-						
-						String command = "LOSEGAME\n";
-						System.out.println("Sending: " + command);
-						out.println(command);
-						out.flush();
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					
+				if (log[i][j].isIntersecting == true ) {	
+					intersect = true;
 					breakOut = true;
 					break;
 				}
-				
 				if (breakOut == true) { break; }
-					
 			}
-			
-			if (breakOut == true) { break; }
-		}
-			
-			/*
-			
-			//IF ANd CAR HAS STOPPED, END GAME
-			//temp variable to break out of nested loop
-			boolean breakOut = false;
-			//temp variable to flag if one log is intersecting
-			boolean collision = false;
-			//temp variable to flag if one log is intersecting
-			boolean intersect = false;
-			
-			for ( int i = 0; i < car.length; i++ ) {
-				for ( int j = 0; j < car[i].length; j++ ) {
-						
-					if ( car[i][j].getIsMoving() == false ) {
-						collision = true;
-						breakOut = true;
-						break;
-					}
+		}	
+		if (intersect != true) {
+			try {
+				s = new Socket("localhost", SERVER_PORT);
+				//Initialize data stream to send data out
+				OutputStream outstream = s.getOutputStream();
+				PrintWriter out = new PrintWriter(outstream);
 				
-							
-					if (breakOut == true) { break; }
-				}
+				String command = "LOSEGAME\n";
+				System.out.println("Sending: " + command);
+				out.println(command);
+				out.flush();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
-					
-			//IF FROG IS NOT INTERSECTING WITH LOG, END GAME
-			for ( int i = 0; i < log.length; i++ ) {
-				for ( int j = 0; j < log[i].length; j++ ) {
-							
-							
-					if (log[i][j].isIntersecting() == true ) {
-								
-						intersect = true;
-								
-						breakOut = true;
-						break;
-					}
-						
-					if (breakOut == true) { break; }
-				}
-			}
-					
-			if (intersect != true) {
-				gameLose();
-			}
-			
-			if (collision == true) {
-				gameLose();
-			}
+		}
 		
-			*/
-			
 }
 		
-		
-			
-			
-
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -829,22 +584,12 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 				out.println(command);
 				out.flush();
 				s.close();
-				
 					
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			
-			
-			
-			
-			
-		}
-		
+		}	
 	}
-		
-	
-
 }
  
