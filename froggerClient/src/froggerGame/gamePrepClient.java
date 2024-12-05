@@ -226,7 +226,7 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 								
 								s2 = client.accept();
 								ClientService myService = new ClientService (s2, frog, log, car,
-										score, frogLabel, carLabel, logLabel, restartBtn);
+										score, frogLabel, carLabel, logLabel, restartBtn, content);
 								Thread t2 = new Thread(myService);
 								t2.start();
 									
@@ -234,8 +234,6 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
-							
-							System.out.println("client connected");
 							
 						}
 					
@@ -259,8 +257,6 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 
 						while (true) {
 							
-							System.out.println("frog thread");
-							
 							try {
 								Socket s = new Socket("localhost", SERVER_PORT);
 								//Initialize data stream to send data out
@@ -268,7 +264,6 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 								PrintWriter out = new PrintWriter(outstream);
 								
 								String command = "GETFROG\n";
-								System.out.println("Sending: "+ command);
 								out.println(command);
 								out.flush();
 								s.close();
@@ -302,9 +297,7 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 					try {
 
 						while (true) {
-							
-							System.out.println("car thread");
-							
+
 							try {
 								Socket s = new Socket("localhost", SERVER_PORT);
 								//Initialize data stream to send data out
@@ -312,7 +305,6 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 								PrintWriter out = new PrintWriter(outstream);
 								
 								String command = "GETCAR\n";
-								System.out.println("Sending: "+ command);
 								out.println(command);
 								out.flush();
 								s.close();
@@ -346,9 +338,7 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 					try {
 						
 						while (true) {
-							
-							System.out.println("log thread");
-							
+
 							try {
 								Socket s = new Socket("localhost", SERVER_PORT);
 								//Initialize data stream to send data out
@@ -356,7 +346,6 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 								PrintWriter out = new PrintWriter(outstream);
 								
 								String command = "GETLOG\n";
-								System.out.println("Sending: "+ command);
 								out.println(command);
 								out.flush();
 								s.close();
@@ -679,14 +668,29 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
 	
-		/*
+		Socket s;
 		
 		//END GAME WHEN ENDZONE IS REACHED
 		if (frog.getY() < 100) {
 			
-			gameWin();
+			try {
+				s = new Socket("localhost", SERVER_PORT);
+				//Initialize data stream to send data out
+				OutputStream outstream = s.getOutputStream();
+				PrintWriter out = new PrintWriter(outstream);
+				
+				String command = "WINGAME\n";
+				System.out.println("Sending: " + command);
+				out.println(command);
+				out.flush();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			
 		} else {
+			
+			/*
 			
 			//IF ANd CAR HAS STOPPED, END GAME
 			//temp variable to break out of nested loop
@@ -734,10 +738,12 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 			if (collision == true) {
 				gameLose();
 			}
+		
+			*/
 			
 		}
 		
-		*/
+		
 			
 			
 	}
@@ -751,7 +757,22 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 		
 		if (e.getSource() == restartBtn){
 			
-			//STARTGAME\n
+			try {
+				Socket s = new Socket("localhost", SERVER_PORT);
+				//Initialize data stream to send data out
+				OutputStream outstream = s.getOutputStream();
+				PrintWriter out = new PrintWriter(outstream);
+				
+				String command = "STARTGAME\n";
+				out.println(command);
+				out.flush();
+				s.close();
+				
+					
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			
 			
 			

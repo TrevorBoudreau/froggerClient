@@ -1,11 +1,13 @@
 package froggerGame;
 
+import java.awt.Container;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
@@ -23,12 +25,13 @@ public class ClientService implements Runnable {
 	private JLabel frogLabel, carLabel[][], logLabel[][];
 	private JButton restartBtn;
 	private JLabel scoreLabel;
+	private Container content;
 	int score = 0;
 	
 	public ClientService() {}
 
 	public ClientService (Socket Socket, frogSprite frog, logSprite[][] log, carSprite[][] car, 
-			int score, JLabel frogLabel, JLabel[][] carLabel, JLabel[][] logLabel, JButton restartButton ) {
+			int score, JLabel frogLabel, JLabel[][] carLabel, JLabel[][] logLabel, JButton restartButton, Container content ) {
 		this.s = Socket;
 		this.frog = frog;
 		this.log = log;
@@ -37,6 +40,8 @@ public class ClientService implements Runnable {
 		this.frogLabel = frogLabel;
 		this.carLabel = carLabel;
 		this.logLabel = logLabel;
+		this.restartBtn = restartButton;
+		this.content = content;
 	}
 	
 	public void run() {
@@ -84,8 +89,6 @@ public class ClientService implements Runnable {
 			int x = in.nextInt();
 			int y = in.nextInt();
 			
-			System.out.println("X: " + x + "Y: " + y );
-			
 			frog.setX(x);
 			frog.setY(y);
 			
@@ -97,19 +100,40 @@ public class ClientService implements Runnable {
 			
 			//check the start game function in gameprep for reference
 			
+			//let frog be controllable
+			content.setFocusable(true);
+			content.requestFocusInWindow();  //DOES NOT WORK WITHOUT THIS LINE!!
+			
+			//hide visibility button
+			restartBtn.setVisible(false);
+	
+			//frogLabel.setIcon( frogImage );
+			
+			//score = scoreDB.getScore();
+			//scoreLabel.setText("Score: " + score);
+			
 			return;
 			
 			
 		} else if ( command.equals("WINGAME") ) {
 				
 			//check the WIN game function in gameprep for reference
-				
+			System.out.println("WIN GAME ON CLIENT TRIGGERED");	
+			
+			//prevent player from moving
+			content.setFocusable(false);
+			
+			//show visibility button
+			restartBtn.setVisible(true);
+			
+			
 			return;
 		
 			
 		} else if ( command.equals("LOSEGAME") ) {
 			
-			//check the LOSE game function in gameprep for reference
+			System.out.println("LOSE GAME ON CLIENT TRIGGERED");
+
 				
 			return;
 				
@@ -117,6 +141,13 @@ public class ClientService implements Runnable {
 			
 			for ( int i = 0; i < car.length; i++ ) {
 				for ( int j = 0; j < car[i].length; j++ ) {
+					
+					if (!in.hasNextInt()) {
+						//To skip the GETCAR part of the command string when looping through,
+						//otherwise the nextInt() below will hit a string and errors out
+						//This took an hour to figure out
+						String skip = in.next();
+					}
 					
 					if (!in.hasNextInt()) {
 						//To skip the GETCAR part of the command string when looping through,
