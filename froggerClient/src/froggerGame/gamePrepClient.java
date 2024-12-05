@@ -688,7 +688,70 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 				e1.printStackTrace();
 			}
 			
-		} else {
+		}
+		
+		//isMoving is calculated on server side and passed back to the client in GETCAR
+		for ( int i = 0; i < car.length; i++ ) {
+			for ( int j = 0; j < car[i].length; j++ ) {
+			
+				if ( car[i][j].getIsMoving() == false ) {
+					try {
+						s = new Socket("localhost", SERVER_PORT);
+						//Initialize data stream to send data out
+						OutputStream outstream = s.getOutputStream();
+						PrintWriter out = new PrintWriter(outstream);
+						
+						String command = "LOSEGAME\n";
+						System.out.println("Sending: " + command);
+						out.println(command);
+						out.flush();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
+					
+				}
+			}
+		}
+		
+		//IF FROG IS NOT INTERSECTING WITH LOG, END GAME
+		//isIntersecting is calculated on server side and passed back to the client in GETLOG
+		
+		//temp variable to break out of nested loop
+		boolean breakOut = false;
+
+		for ( int i = 0; i < log.length; i++ ) {
+			for ( int j = 0; j < log[i].length; j++ ) {
+						
+						
+				if (log[i][j].isIntersecting == false ) {
+							
+					try {
+						s = new Socket("localhost", SERVER_PORT);
+						//Initialize data stream to send data out
+						OutputStream outstream = s.getOutputStream();
+						PrintWriter out = new PrintWriter(outstream);
+						
+						String command = "LOSEGAME\n";
+						System.out.println("Sending: " + command);
+						out.println(command);
+						out.flush();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
+					breakOut = true;
+					break;
+				}
+				
+				if (breakOut == true) { break; }
+					
+			}
+			
+			if (breakOut == true) { break; }
+		}
 			
 			/*
 			
@@ -741,12 +804,11 @@ public class gamePrepClient extends JFrame implements KeyListener, ActionListene
 		
 			*/
 			
-		}
+}
 		
 		
 			
 			
-	}
 
 
 	@Override

@@ -100,6 +100,8 @@ public class ClientService implements Runnable {
 			
 			//check the start game function in gameprep for reference
 			
+			frogLabel.setIcon( new ImageIcon( getClass().getResource(gameProperties.FROG_IMAGE) ) );
+			
 			//let frog be controllable
 			content.setFocusable(true);
 			content.requestFocusInWindow();  //DOES NOT WORK WITHOUT THIS LINE!!
@@ -133,8 +135,15 @@ public class ClientService implements Runnable {
 		} else if ( command.equals("LOSEGAME") ) {
 			
 			System.out.println("LOSE GAME ON CLIENT TRIGGERED");
+			
+			frogLabel.setIcon( new ImageIcon( getClass().getResource(gameProperties.FROG_DEAD_IMAGE) ) );	
 
-				
+			//prevent player from moving
+			content.setFocusable(false);
+			
+			//show visibility button
+			restartBtn.setVisible(true);
+			
 			return;
 				
 		} else if ( command.equals("GETCAR") ) {
@@ -150,9 +159,7 @@ public class ClientService implements Runnable {
 					}
 					
 					if (!in.hasNextInt()) {
-						//To skip the GETCAR part of the command string when looping through,
-						//otherwise the nextInt() below will hit a string and errors out
-						//This took an hour to figure out
+						//To skip the isMoving part of the command string
 						String skip = in.next();
 					}
 					
@@ -161,6 +168,8 @@ public class ClientService implements Runnable {
 					
 					car[i][j].setX(x);
 					car[i][j].setY(y);
+					
+					car[i][j].setIsMoving( in.nextBoolean() );;
 					
 					carLabel[i][j].setLocation( car[i][j].getX(), car[i][j].getY() );
 					
@@ -184,8 +193,15 @@ public class ClientService implements Runnable {
 						String skip = in.next();
 					}
 					
+					if (!in.hasNextInt()) {
+						//To skip the isIntersecting part of the command string
+						String skip = in.next();
+					}
+					
 					int x = in.nextInt();
 					int y = in.nextInt();
+					
+					log[i][j].setIntersecting( in.nextBoolean() );
 					
 					log[i][j].setX(x);
 					log[i][j].setY(y);
